@@ -49,12 +49,17 @@ export class List extends Component {
             const unsubscribeUpdate = this.emitter.subscribe('update record', async (state) => {
                 console.log('subscribe update record: ', state)
                 if (state === 'confirmed') {
+                    let recordId = 0
                     const updatedData = {}
                     for (let i = 0; i < cells.length; i++) {
                         const className = cells[i].className
                         if (className === 'data-container') {
+                            const columnName = cells[i].dataset.th
                             cells[i].toggleAttribute('contenteditable')
-                            updatedData[i] = cells[i].textContent
+                            updatedData[columnName] = cells[i].textContent.replace(/^\s+|\s+$/g, '')
+                        }
+                        if (className === 'non-edit') {
+                            recordId = cells[i].textContent.replace(/^\s+|\s+$/g, '')
                         }
                     }
                     event.target.dataset.action = 'edit'
@@ -62,7 +67,7 @@ export class List extends Component {
                     event.target.closest('tr').classList.toggle('editable')
                     console.log('cells: ', cells)
                     await createRequest('/api/update-record', 'PUT', {
-                        data: updatedData,
+                        data: {id: recordId, data: updatedData},
                     })
                 }
                 unsubscribeUpdate()

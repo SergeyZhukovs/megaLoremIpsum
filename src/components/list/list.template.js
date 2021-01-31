@@ -10,7 +10,7 @@ function createHead (cellItem, isLoading) {
 function createCell (cellItem, isLoading, cellName = 'def') {
     const cellClass = isLoading ? tableStyles.skeleton : cellName
     const contentClass = isLoading ? `${tableStyles.title} ${tableStyles.loading}` : ''
-    return `<td class="${cellClass}">
+    return `<td data-th="${cellItem.columnName || ''}" class="${cellClass}">
         <span class="${contentClass}">${cellItem.value || ''}</span>
     </td>`
 }
@@ -64,6 +64,7 @@ export function createList (data = [], isLoading = true ) {
 
     if (!isLoading) {
         cols = getColumnName(data)
+        console.log('data: ', data)
     }
 
     rows.push(createRow(cols, 'head', isLoading))

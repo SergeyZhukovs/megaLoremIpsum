@@ -44,7 +44,7 @@ export function createBtn (type = 'submit', btnText = 'Submit') {
 export function getColumnName (data) {
     const columns = []
     data.forEach((item) => {
-        item.data.forEach((column, index) => {
+        item.data.forEach((column) => {
             if (columns.includes(column.columnName)) return
             columns.push(column.columnName)
         })

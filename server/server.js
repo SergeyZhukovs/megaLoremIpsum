@@ -28,8 +28,30 @@ app.get('/api/getList', async (req, res) => {
     return res.end(allData)
 })
 
-app.put('/api/update-record', (req, res) => {
-    console.log('===>>>>', req.body)
+app.put('/api/update-record', async (req, res) => {
+    const dataFromStorage = await getAll(client, 'list')
+    const data = JSON.parse(dataFromStorage)
+    const recordId = req.body.data.id
+
+    data.forEach((item, rootIndex) => {
+        item.data.forEach((row) => {
+            if (row.columnName === 'ID' && row.value == recordId) {
+                const info = Object.keys(req.body.data.data)
+                const newData = []
+                newData.push({'columnName': 'ID', 'value': recordId})
+                info.forEach((item) => {
+                    const tmp = {
+                        'columnName': item,
+                        'value': req.body.data.data[item],
+                    }
+                    newData.push(tmp)
+                })
+                data[rootIndex].data = newData
+            }
+        })
+    })
+    await setData(client, 'list', data)
+    // console.log(JSON.stringify(data))
     res.end('{}')
 })
 
