@@ -8,7 +8,7 @@ function createCell (cellItem, isLoading) {
 
     return `<div class="${formStyles.formItem}">
                 ${createLabel(cellItem, cellClass, contentClass)}
-                ${createInpt('text', inputName, 'inpt', true)}
+                ${createInpt('text', inputName, 'inpt w-100', true)}
             </div>`
 }
 

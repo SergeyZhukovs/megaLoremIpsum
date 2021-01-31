@@ -7,7 +7,7 @@ export class PopupConfirm extends Component {
     constructor ($root, options) {
         super($root, {
             name: 'PopupConfirm',
-            listeners: ['click'],
+            listeners: ['click', 'keydown'],
             ...options,
         })
 
@@ -74,6 +74,10 @@ export class PopupConfirm extends Component {
         }
 
         document.querySelector(`.${PopupConfirm.className}`).classList.toggle('active')
+    }
+
+    keydown (e) {
+        console.log('e ->', e)
     }
 
     toHTML () {

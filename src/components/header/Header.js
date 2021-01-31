@@ -21,11 +21,17 @@ export class Header extends Component {
     }*/
 
     click (event) {
-        console.log('target dataset: ', event.target.dataset.type)
+        const datas = {
+            id: 123,
+            user: 'test',
+        }
+
+        setToHistory(datas, '', './record=' + datas.id)
+        /* console.log('target dataset: ', event.target.dataset.type)
         if (event.target.dataset.type && event.target.dataset.type === 'button') {
             console.log('open popup ...')
             this.emitter.dispatch('click to open popup', true)
-        }
+        }*/
     }
 
     toHTML () {

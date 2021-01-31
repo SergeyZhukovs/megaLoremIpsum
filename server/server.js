@@ -55,9 +55,20 @@ app.put('/api/update-record', async (req, res) => {
     res.end('{}')
 })
 
-app.delete('/api/delete-record', (req, res) => {
-    console.log('===>>>>', req.body)
-    res.end('{}')
+app.delete('/api/delete-record', async (req, res) => {
+    const dataFromStorage = await getAll(client, 'list')
+    const data = JSON.parse(dataFromStorage)
+    const recordId = req.body.data.id
+
+    data.forEach((item, rootIndex) => {
+        item.data.forEach((row) => {
+            if (row.columnName === 'ID' && row.value == recordId) {
+                data.splice(rootIndex, 1)
+            }
+        })
+    })
+    await setData(client, 'list', data)
+    return res.end(JSON.stringify(data))
 })
 
 app.post('/api/add-column', async (req, res) => {

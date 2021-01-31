@@ -1,6 +1,7 @@
 import commonStyles from '@scss/common.scss'
 import popupStyles from '@scss/popup.scss'
 import { Component } from '@core/Component'
+import {getFromHistory} from '@core/utils';
 
 export class Popup extends Component {
     static className = popupStyles.notesPopup
@@ -8,21 +9,36 @@ export class Popup extends Component {
     constructor ($root, options) {
         super($root, {
             name: 'Popup',
-            listeners: ['click'],
+            listeners: ['click', 'load'],
             ...options,
         })
 
-        this.openPopup = false
+        this.componentRoot = $root
 
         window.onpopstate = function (event) {
             console.warn(`location: ${document.location}, state: ${JSON.stringify(event.state)}`)
         }
 
-        this.emitter.subscribe('click to open popup', (state) => {
-            this.openPopup = state
-            document.querySelector('.popup').parentElement.classList.add(popupStyles.showPopup)
-            console.log('event from header', state)
+        const subscribe = this.emitter.subscribe('click to open popup', (state) => {
+            const info = getFromHistory()
+            this.componentRoot.classList.toggle(popupStyles.showPopup)
+            const data = Object.keys(info.data)
+            document.querySelector(`.${popupStyles.modalBody}`).innerHTML = `<div>
+            ${data.map((item) => (item))}
+            </div>`
+            subscribe()
         })
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('record');
+        console.log('myParam: ', Number.isInteger(parseInt(myParam)))
+        if (Number.isInteger(parseInt(myParam))) {
+            // this.emitter.dispatch('click to open popup', false)
+        }
+    }
+
+    load (e) {
+        console.warn('============')
     }
 
     click (event) {
@@ -33,40 +49,26 @@ export class Popup extends Component {
         if (!isClosest) {
             this.emitter.dispatch('click to open popup', false)
             console.log('click popup', event.target.className)
-            const popupElem = document.querySelector('.popup')
-            // popupElem.parentElement.classList.add(popupStyles.hidePopup)
-            popupElem.parentElement.classList.remove(popupStyles.showPopup)
+            this.componentRoot.classList.toggle(popupStyles.showPopup)
+            history.back()
         }
     }
 
     toHTML () {
-        return `<div class="popup ${popupStyles.modal}">
+        return `<div class="${popupStyles.modal}">
         <div class="${popupStyles.modalHeader}">
             <h3>Add new reacord</h3>
             <div class="${popupStyles.closeModal} ${commonStyles.icon} ${commonStyles.close}"></div>
         </div>
-        <div class="modal-body">
-            <div>
-                <input name="record" type="text"/>
-            </div>
-            <div>
-                <input name="record" type="text"/>
-            </div>
-            <div>
-                <input name="record" type="text"/>
-            </div>
-            <div>
-                <input name="record" type="text"/>
-            </div>
+        <div class="${popupStyles.modalBody}">
+            
             <div class="button1">Page 1</div>
             <div class="button2">Page 2</div>
             <div class="button3">Page 3</div>
         </div>
         <div class="modal-footer">
-            <button>Save</button>
             <button>Close</button>
         </div>
-        <div class="buttonBack">Back</div>
     </div>`
     }
 

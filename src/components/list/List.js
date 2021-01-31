@@ -1,7 +1,7 @@
 import tableStyles from '@scss/tables.scss'
 import { Component } from '@core/Component'
 import { createList } from '@/components/list/list.template';
-import { createRequest } from '@core/utils'
+import {createRequest, setToHistory} from '@core/utils'
 
 export class List extends Component {
     static className = tableStyles.notesTable
@@ -29,16 +29,47 @@ export class List extends Component {
         console.log('click', event)
         switch (action) {
         case 'view':
+            // this.emitter.dispatch('click to open popup', false)
+            // eslint-disable-next-line no-case-declarations
+            let recordId = 0
+            // eslint-disable-next-line no-case-declarations
+            const updatedData = {}
+            for (let i = 0; i < cells.length; i++) {
+                const className = cells[i].className
+                if (className === 'data-container') {
+                    const columnName = cells[i].dataset.th
+                    cells[i].toggleAttribute('contenteditable')
+                    updatedData[columnName] = cells[i].textContent.replace(/^\s+|\s+$/g, '')
+                }
+                if (className === 'non-edit') {
+                    recordId = cells[i].textContent.replace(/^\s+|\s+$/g, '')
+                }
+            }
+
+            setToHistory({id: recordId, data: updatedData}, '', `./?record=${recordId}`)
             this.emitter.dispatch('click to open popup', false)
             break
         case 'delete':
-            this.emitter.dispatch('delete record')
+            this.emitter.dispatch('delete record', 'confirm')
             // eslint-disable-next-line no-case-declarations
             const unsubscribeDelete = this.emitter.subscribe('delete record', async (state) => {
+                console.log('delete !!!!!')
                 if (state === 'confirmed') {
-                    await createRequest('/api/delete-record', 'DELETE', {
-                        data: {},
+                    console.log('delete <---->')
+                    let recordId = 0
+                    for (let i = 0; i < cells.length; i++) {
+                        const className = cells[i].className
+                        if (className === 'non-edit') {
+                            recordId = cells[i].textContent.replace(/^\s+|\s+$/g, '')
+                            break
+                        }
+                    }
+                    const result = await createRequest('/api/delete-record', 'DELETE', {
+                        data: {id: recordId},
                     })
+                    event.target.closest('tr').remove()
+                    console.log('result: ', result)
+                    // this.rt.innerHTML = createList(data, false)
                 }
                 unsubscribeDelete()
             })
