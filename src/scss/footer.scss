@@ -1,0 +1,10 @@
+@import "variables";
+@import "mixins";
+
+.footer {
+  display: flex;
+  background: dimgray;
+  color: #fff;
+  justify-content: center;
+  padding: 30px 0;
+}

@@ -1,0 +1,57 @@
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1;}
+  to { opacity: 0;}
+}
+
+@keyframes change-content {
+  from { align-items: flex-start; }
+  to { align-items: center; }
+}
+
+@keyframes showPopupAnimation {
+  from {
+    transform: scale(.7);
+    opacity: 0.1;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.65);
+    opacity: 0.5;
+  }
+}
+
+@keyframes hidePopupAnimation {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(.7);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.65);
+    opacity: 0.5;
+    //display: none;
+  }
+}
+
+@keyframes loading {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/*ToDo: sass for keyframes*/

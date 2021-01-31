@@ -1,0 +1,74 @@
+@import "variables";
+@import "mixins";
+@import 'animations';
+
+.form-container {
+  display: flex;
+  background: dimgray;
+  color: #fff;
+  justify-content: center;
+  padding: 30px 0;
+
+  .skeleton {
+    background-color: #fff;
+    height: auto;
+    width: auto;
+    overflow: hidden;
+    margin: 12px;
+    box-shadow: 9px 17px 45px -29px rgba(0, 0, 0, 0.44);
+    color: green;
+
+    .title {
+      color: rebeccapurple;
+      display: block;
+      width: 100%;
+      padding: 15px 8px;
+      font-size: 16px;
+      font-weight: 700;
+
+      &.loading {
+        border-radius: 15px;
+        overflow: hidden;
+      }
+    }
+
+    .loading {
+      position: relative;
+      background-color: #e2e2e2;
+      overflow: hidden;
+
+      &:after {
+        display: block;
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        transform: translateX(-100%);
+        background: -webkit-gradient(linear, left top,
+                right top, from(transparent),
+                color-stop(rgba(255, 255, 255, 0.2)),
+                to(transparent));
+
+        background: linear-gradient(90deg, transparent,
+                rgba(255, 255, 255, 0.5), transparent);
+
+        /* Adding animation */
+        animation: loading 2s infinite;
+      }
+    }
+  }
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-item {
+  margin: 3px;
+}

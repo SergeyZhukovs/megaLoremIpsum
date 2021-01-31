@@ -1,0 +1,10 @@
+@import "variables";
+@import "mixins";
+
+.heading {
+  color: $white;
+}
+
+button.rounded {
+  @include button(#fff);
+}

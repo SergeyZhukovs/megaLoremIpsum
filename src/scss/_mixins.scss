@@ -1,0 +1,27 @@
+@mixin button($color: green) {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    height: 2rem;
+    min-width: 2rem;
+    padding: 0.3rem;
+    color: $color;
+    background: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+}
+
+@mixin gradientBackground($direction, $list) {
+    background: linear-gradient($direction, $list);
+}
+
+@mixin tablet-up {
+    @media (min-width: 768px) {
+        @content;
+    }
+}
+
+@mixin desktop-up {
+    @media (min-width: 1025px) {
+        @content;
+    }
+}

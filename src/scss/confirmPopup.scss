@@ -1,0 +1,79 @@
+@import 'variables';
+@import 'mixins';
+@import 'animations';
+
+.confirm-popup {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+
+    &.active {
+        display: flex;
+    }
+
+    .item {
+        height: 15px;
+        width: 300px;
+        background: dimgrey;
+        border-radius: 40px;
+    }
+
+    .title {
+        color: red;
+    }
+
+}
+
+.active {
+    display: flex;
+}
+
+.modal {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+}
+
+.modal-footer {
+    color: #4158d0;
+    padding: 25px;
+    width: 100%;
+}
+.modal-body {
+    background: darkgrey;
+    color: white;
+    padding: 25px;
+    width: 100%;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    padding: 25px;
+}
+
+.cancel-modal {
+    color: white;
+    background: red;
+    border-radius: 30px;
+}
+
+.confirm-modal {
+    color: #4158d0;
+    border-radius: 30px;
+}
+
+.modal-header {
+    padding: 25px;
+    width: 100%;
+}
