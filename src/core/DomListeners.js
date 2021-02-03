@@ -5,6 +5,7 @@ export class DomListeners {
     }
 
     initDomListeners () {
+        console.log('this selector:', this.selector)
         this.listeners.forEach((listener) => {
             this[listener] = this[listener].bind(this)
             this.selector.addEventListener(listener, this[listener])

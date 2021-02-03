@@ -75,6 +75,7 @@ export class List extends Component {
             })
             break
         case 'save':
+            // this.rt.focus()
             this.emitter.dispatch('update record', 'confirm')
             // eslint-disable-next-line no-case-declarations
             const unsubscribeUpdate = this.emitter.subscribe('update record', async (state) => {
@@ -106,6 +107,7 @@ export class List extends Component {
             break
         case 'edit':
             // eslint-disable-next-line no-case-declarations
+            // this.rt.focus()
             for (let i = 0; i < cells.length; i++) {
                 const className = cells[i].className
                 if (className === 'data-container') {

@@ -43,6 +43,7 @@
     "@babel/polyfill": "^7.10.4",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "svg-url-loader": "^7.1.1"
   }
 }

@@ -1,3 +1,4 @@
+// import { viewIcon, deleteIcon } from '@core/icons'
 import tableStyles from '@scss/tables.scss'
 function createHead (cellItem, isLoading) {
     const cellClass = isLoading ? tableStyles.skeleton : ''
@@ -23,7 +24,7 @@ function createRow (cols = [], type = 'cell', isLoading = true) {
         controlHead = '&nbsp;'
         controlContent = `<div class="controls" style="display: flex">
                 <button data-action="view">View</button>
-                <button data-action="edit">Edit</button>
+                <button class="edit" data-action="edit">Edit</button>
                 <button data-action="delete">Delete</button>
         </div>`
     }

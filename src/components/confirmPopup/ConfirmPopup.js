@@ -11,6 +11,12 @@ export class PopupConfirm extends Component {
             ...options,
         })
 
+        /* const keydown = (event) => {
+            console.log('e ->', event)
+        }*/
+
+        // document.querySelector('.confirm-popup___1EJOT').addEventListener('keydown', keydown);
+
         this.emitter.subscribe('new record', (state) => {
             console.log('confirm action', state)
             this.dialogHandler(confirmPopupStyles.title)
@@ -34,6 +40,7 @@ export class PopupConfirm extends Component {
             document
                 .querySelector(`.${PopupConfirm.className}`)
                 .classList.toggle(confirmPopupStyles.active)
+            $root.focus()
         })
 
         this.emitter.subscribe('update record', (state) => {
@@ -48,6 +55,7 @@ export class PopupConfirm extends Component {
             document
                 .querySelector(`.${PopupConfirm.className}`)
                 .classList.toggle(confirmPopupStyles.active)
+            $root.focus()
         })
     }
 
@@ -69,19 +77,45 @@ export class PopupConfirm extends Component {
             this.emitter.dispatch('new record', 'canceled')
             break
         default:
-            this.emitter.dispatch('new record', 'canceled')
+            // eslint-disable-next-line no-case-declarations
+            const isClosest = event.target.closest(`.${confirmPopupStyles.modal}`)
+            if (!isClosest) {
+                this.emitter.dispatch('new record', 'canceled')
+            }
             break
         }
-
-        document.querySelector(`.${PopupConfirm.className}`).classList.toggle('active')
     }
 
     keydown (e) {
-        console.log('e ->', e)
+        if (e.code === 'Escape') {
+            this.emitter.dispatch('delete record', 'canceled')
+        }
     }
 
     toHTML () {
-        return `<div class="${confirmPopupStyles.item}">
+        return `<div class="${confirmPopupStyles.modal}">
+                <div class="${confirmPopupStyles.modalHeader}">
+                    <div class="${confirmPopupStyles.title}">Add new record!!!?</div>
+                    <div class="close">
+                        <button class="cancel" data-action="cancel">X</button>
+                    </div>
+                </div>
+                <div class="md-body ${confirmPopupStyles.modalBody}">
+                    Are you sure you want to add new record!!!!?
+                </div>
+                <div class="${confirmPopupStyles.modalFooter}">
+                    <div class="${confirmPopupStyles.controls}">
+                        <button class="${confirmPopupStyles.confirmModal}" data-action="confirm">
+                            Confirm
+                        </button>
+                        <button class="${confirmPopupStyles.cancelModal}" data-action="cancel">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>`
+
+        /*        return `<div class="${confirmPopupStyles.item}">
             <div class="${confirmPopupStyles.modal}">
                 <div class="${confirmPopupStyles.modalHeader}">
                     <div class="${confirmPopupStyles.title}">Add new record!!!?</div>
@@ -103,6 +137,6 @@ export class PopupConfirm extends Component {
                     </div>
                 </div>
             </div>
-        </div>`
+        </div>`*/
     }
 }

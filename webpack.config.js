@@ -85,6 +85,16 @@ module.exports = {
                 ],
             },
             {
+                test: /\.svg/,
+                use: {
+                    loader: 'svg-url-loader',
+                    options: {
+                        // make all svg images to work in IE
+                        iesafe: true,
+                    },
+                },
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: [

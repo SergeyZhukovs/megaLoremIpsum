@@ -67,3 +67,4 @@ export async function createRequest (apiPath, type = 'get', data = {}) {
     const response = await fetch(apiPath, options)
     return await response.json()
 }
+

@@ -21,8 +21,13 @@ export class Popup extends Component {
 
         const subscribe = this.emitter.subscribe('click to open popup', (state) => {
             const info = getFromHistory()
+            let data = {}
+            if (!info) {
+                data = {}
+            } else {
+                data = Object.keys(info.data)
+            }
             this.componentRoot.classList.toggle(popupStyles.showPopup)
-            const data = Object.keys(info.data)
             document.querySelector(`.${popupStyles.modalBody}`).innerHTML = `<div>
             ${data.map((item) => (item))}
             </div>`
@@ -34,6 +39,9 @@ export class Popup extends Component {
         console.log('myParam: ', Number.isInteger(parseInt(myParam)))
         if (Number.isInteger(parseInt(myParam))) {
             // this.emitter.dispatch('click to open popup', false)
+            setTimeout(() => {
+                // this.emitter.dispatch('click to open popup', false)
+            }, 5000)
         }
     }
 
@@ -43,7 +51,7 @@ export class Popup extends Component {
 
     click (event) {
         const target = event.target
-        const modalSelector = `.popup`
+        const modalSelector = document.querySelector(`.${popupStyles.modal}`)
         const isClosest = target.closest(modalSelector)
         console.log('modalSelector: ', modalSelector)
         if (!isClosest) {
@@ -55,7 +63,7 @@ export class Popup extends Component {
     }
 
     toHTML () {
-        return `<div class="${popupStyles.modal}">
+        return `<div class="popup ${popupStyles.modal}">
         <div class="${popupStyles.modalHeader}">
             <h3>Add new reacord</h3>
             <div class="${popupStyles.closeModal} ${commonStyles.icon} ${commonStyles.close}"></div>
