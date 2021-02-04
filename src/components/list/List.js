@@ -15,12 +15,35 @@ export class List extends Component {
 
         this.rt = $root
 
-        this.emitter.dispatch('open modal', true)
+        // this.emitter.dispatch('open modal', true)
     }
 
     async fetchData () {
         const result = await createRequest('/api/getList')
         return result
+    }
+
+    prepareData (target, saveDate = true) {
+        let recordId = 0
+        const updatedData = {}
+        for (let i = 0; i < target.length; i++) {
+            const className = target[i].className
+            if (className === 'data-container') {
+                const columnName = target[i].dataset.th
+                target[i].toggleAttribute('contenteditable')
+                if (saveDate) {
+                    updatedData[columnName] = target[i].textContent.replace(/^\s+|\s+$/g, '')
+                }
+            }
+            if (className === 'non-edit') {
+                recordId = target[i].textContent.replace(/^\s+|\s+$/g, '')
+            }
+        }
+
+        if (saveDate) {
+            return {id: recordId, data: updatedData}
+        }
+        return {id: recordId}
     }
 
     async click (event) {
@@ -29,43 +52,29 @@ export class List extends Component {
         console.log('click', event)
         switch (action) {
         case 'view':
-            // this.emitter.dispatch('click to open popup', false)
             // eslint-disable-next-line no-case-declarations
-            let recordId = 0
-            // eslint-disable-next-line no-case-declarations
-            const updatedData = {}
-            for (let i = 0; i < cells.length; i++) {
-                const className = cells[i].className
-                if (className === 'data-container') {
-                    const columnName = cells[i].dataset.th
-                    cells[i].toggleAttribute('contenteditable')
-                    updatedData[columnName] = cells[i].textContent.replace(/^\s+|\s+$/g, '')
-                }
-                if (className === 'non-edit') {
-                    recordId = cells[i].textContent.replace(/^\s+|\s+$/g, '')
-                }
-            }
-
-            setToHistory({id: recordId, data: updatedData}, '', `./?record=${recordId}`)
+            const dataObject = this.prepareData(cells)
+            setToHistory(dataObject, '', `./?record=${dataObject.id}`)
             this.emitter.dispatch('click to open popup', false)
             break
         case 'delete':
-            this.emitter.dispatch('delete record', 'confirm')
+            this.emitter.dispatch('confirming', {type: 'delete'})
             // eslint-disable-next-line no-case-declarations
-            const unsubscribeDelete = this.emitter.subscribe('delete record', async (state) => {
+            const unsubscribeDelete = this.emitter.subscribe('confirming', async (state) => {
                 console.log('delete !!!!!')
                 if (state === 'confirmed') {
                     console.log('delete <---->')
-                    let recordId = 0
+                    const dataObject = this.prepareData(cells, false)
+                    /* let recordId = 0
                     for (let i = 0; i < cells.length; i++) {
                         const className = cells[i].className
                         if (className === 'non-edit') {
                             recordId = cells[i].textContent.replace(/^\s+|\s+$/g, '')
                             break
                         }
-                    }
+                    }*/
                     const result = await createRequest('/api/delete-record', 'DELETE', {
-                        data: {id: recordId},
+                        data: dataObject,
                     })
                     event.target.closest('tr').remove()
                     console.log('result: ', result)
@@ -75,39 +84,24 @@ export class List extends Component {
             })
             break
         case 'save':
-            // this.rt.focus()
-            this.emitter.dispatch('update record', 'confirm')
+            this.emitter.dispatch('confirming', {type: 'update'})
             // eslint-disable-next-line no-case-declarations
-            const unsubscribeUpdate = this.emitter.subscribe('update record', async (state) => {
+            const unsubscribeUpdate = this.emitter.subscribe('confirming', async (state) => {
                 console.log('subscribe update record: ', state)
                 if (state === 'confirmed') {
-                    let recordId = 0
-                    const updatedData = {}
-                    for (let i = 0; i < cells.length; i++) {
-                        const className = cells[i].className
-                        if (className === 'data-container') {
-                            const columnName = cells[i].dataset.th
-                            cells[i].toggleAttribute('contenteditable')
-                            updatedData[columnName] = cells[i].textContent.replace(/^\s+|\s+$/g, '')
-                        }
-                        if (className === 'non-edit') {
-                            recordId = cells[i].textContent.replace(/^\s+|\s+$/g, '')
-                        }
-                    }
-                    event.target.dataset.action = 'edit'
-                    event.target.textContent = 'Edit'
-                    event.target.closest('tr').classList.toggle('editable')
-                    console.log('cells: ', cells)
+                    const dataObject = this.prepareData(cells)
                     await createRequest('/api/update-record', 'PUT', {
-                        data: {id: recordId, data: updatedData},
+                        data: dataObject,
                     })
                 }
+                event.target.dataset.action = 'edit'
+                event.target.textContent = 'Edit'
+                event.target.closest('tr').classList.toggle('editable')
                 unsubscribeUpdate()
             })
             break
         case 'edit':
             // eslint-disable-next-line no-case-declarations
-            // this.rt.focus()
             for (let i = 0; i < cells.length; i++) {
                 const className = cells[i].className
                 if (className === 'data-container') {
@@ -118,8 +112,6 @@ export class List extends Component {
             event.target.textContent = 'Save'
 
             event.target.closest('tr').classList.toggle('editable')
-
-            // console.log('cells', cells)
             break
         default:
             // console.log('event.target: ', action)
@@ -127,8 +119,6 @@ export class List extends Component {
             break
         }
     }
-
-    /* ToDo: get list columns names and values from history*/
 
     toHTML () {
         const requestTime = new Date().getTime()

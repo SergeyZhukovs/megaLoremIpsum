@@ -9,7 +9,6 @@
     color: $color;
     background: rgba(0, 0, 0, 0.7);
     cursor: pointer;
-    z-index: 2;
 }
 
 @mixin gradientBackground($direction, $list) {
