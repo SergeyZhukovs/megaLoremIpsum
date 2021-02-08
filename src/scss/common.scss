@@ -1,40 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;700&display=swap');
 @import 'mixins';
+@import 'variables';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html {
   font-family: 'Open Sans Condensed', sans-serif;
+}
+
+body {
+  font-size: $main_font_size;
 }
 
 button {
   position: relative;
   transition: .5s;
-  @include button(#fff);
+  @include button($whiteColor);
 
   &:hover {
-    color: orangered;
-  }
-}
-
-.icon {
-  .close {
-    position: absolute;
-    right: 32px;
-    top: 32px;
-    width: 32px;
-    height: 32px;
-  }
-
-  &:before, &:after {
-    position: absolute;
-    right: 15px;
-    content: ' ';
-    height: 33px;
-    width: 2px;
-    background-color: #333;
-    transform: rotate(45deg);
-  }
-
-  &:after {
-    transform: rotate(-45deg);
+    color: $hoverColor;
   }
 }
 
@@ -44,7 +32,7 @@ button {
 
 input {
   padding: 6px 12px;
-  border: solid 1px #ced4da;
+  border: solid 1px $inputBorderColor;
 }
 
 .label {

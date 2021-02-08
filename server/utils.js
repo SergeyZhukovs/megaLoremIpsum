@@ -13,5 +13,5 @@ export function lastId (data) {
             return
         }
     })
-    return lastRecordId
+    return parseInt(lastRecordId)
 }

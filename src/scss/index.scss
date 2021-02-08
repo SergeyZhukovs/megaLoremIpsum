@@ -1,14 +1,3 @@
 @import 'variables';
 @import 'mixins';
 @import 'common';
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-size: $main_font_size;
-    //@include gradientBackground(to top, ($pink, $blue));
-}

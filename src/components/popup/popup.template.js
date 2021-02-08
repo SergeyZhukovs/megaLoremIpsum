@@ -3,8 +3,8 @@ import popupStyles from '@scss/popup.scss'
 function modalHeader () {
     return `<div class="${popupStyles.modalHeader}">
                 <h3 class="${popupStyles.title}">Record Details</h3>
-                <div class="close">
-                    <button class="${popupStyles.closeModal}" data-action="close"></button>
+                <div class="${popupStyles.closeModal}">
+                    <button data-action="close"></button>
                 </div>
             </div>`
 }

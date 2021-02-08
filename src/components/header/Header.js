@@ -3,7 +3,7 @@ import { Component } from '@core/Component'
 import { createHeader } from '@/components/header/header.template'
 
 export class Header extends Component {
-    static className = 'notes_header'
+    static className = headerStyles.notesHeader
 
     constructor ($root, options) {
         super($root, {
@@ -11,7 +11,6 @@ export class Header extends Component {
             listeners: ['click'],
             ...options,
         })
-        console.log('root', $root)
     }
 
     click (event) {

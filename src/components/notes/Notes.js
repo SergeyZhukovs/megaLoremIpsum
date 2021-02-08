@@ -18,9 +18,6 @@ export class Notes {
             const component = new Component(this.componentRoot, {
                 emitter: this.emitter,
             })
-            if (component.name) {
-                window['c'+ component.name] = component
-            }
             this.componentRoot.innerHTML = component.toHTML()
             rootElement.append(this.componentRoot)
             return component

@@ -1,5 +1,6 @@
 import { viewIcon, deleteIcon, editIcon } from '@core/icons'
 import tableStyles from '@scss/tables.scss'
+
 function createHead (cellItem, isLoading) {
     const cellClass = isLoading ? tableStyles.skeleton : ''
     const contentClass = isLoading ? `${tableStyles.title} ${tableStyles.loading}` : ''

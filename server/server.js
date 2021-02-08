@@ -3,8 +3,6 @@ import { readFile, lastId } from './utils'
 import { createClient, setData, getAll, ifKeyExist, getDataById } from './redis'
 import { capitalize } from '../src/core/utils';
 
-const fs = require('fs')
-
 /* Init app*/
 const app = express()
 app.use(express.json())
@@ -13,15 +11,6 @@ app.use(express.json())
 const client = createClient()
 
 /* methods*/
-
-app.post('/api/create', async (req, res) => {
-    fs.writeFile('server/initData333.json', JSON.stringify(req.body.data), (err) => {
-        if (err) return console.log(err);
-        console.log('Hello World > helloworld.txt');
-    });
-    console.log('req: ', req.body.data)
-    res.end('')
-})
 
 app.get('/api/getList', async (req, res) => {
     const allData = await getAll(client, 'list')
@@ -74,19 +63,6 @@ app.delete('/api/delete-record', async (req, res) => {
     })
     await setData(client, 'list', data)
     return res.end(JSON.stringify(data))
-})
-
-app.post('/api/add-column', async (req, res) => {
-    const newColumn = req.body.name || 'untitled'
-    const dataFromStorage = await getAll(client, 'list')
-    const updatedArray = JSON.parse(dataFromStorage).map((record) => {
-        record.data.push({ columnName: newColumn, value: '' })
-        return record
-    })
-
-    await setData(client, 'list', updatedArray)
-
-    res.end(JSON.stringify({ result: 'ok' }))
 })
 
 app.post('/api/add-record', async (req, res) => {

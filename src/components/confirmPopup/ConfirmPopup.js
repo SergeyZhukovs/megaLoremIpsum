@@ -11,8 +11,6 @@ export class PopupConfirm extends Component {
             ...options,
         })
 
-        this.rtty = $root
-
         this.emitter.subscribe('confirming', (state) => {
             /* we are watching for CRUD */
             document
@@ -34,7 +32,6 @@ export class PopupConfirm extends Component {
             case 'delete':
                 title.innerHTML = 'Delete record?'
                 body.innerHTML = 'Are you sure you want to delete a record?'
-                console.log('focus: ', document.activeElement)
                 break
             }
         })
@@ -76,8 +73,8 @@ export class PopupConfirm extends Component {
         return `<div class="${confirmPopupStyles.modal}">
                 <div class="${confirmPopupStyles.modalHeader}">
                     <div class="${confirmPopupStyles.title}">Add new record!!!?</div>
-                    <div class="close">
-                        <button class="cancel" data-action="cancel">X</button>
+                    <div class="${confirmPopupStyles.close}">
+                        <button class="cancel" data-action="cancel"></button>
                     </div>
                 </div>
                 <div class="md-body ${confirmPopupStyles.modalBody}">

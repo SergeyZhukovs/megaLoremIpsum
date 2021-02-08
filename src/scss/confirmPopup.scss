@@ -16,12 +16,12 @@
 .item {
     height: 15px;
     width: 300px;
-    background: dimgrey;
+    background: $elementBg;
     border-radius: 40px;
 }
 
 .title {
-    color: #3b3536;
+    color: $mainFontColor;
 }
 
 .modal {
@@ -31,8 +31,8 @@
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: #fff;
-    border-radius: 15px;
+    background: $whiteColor;
+    @include border-radius();
     transition: .5s;
 
     @include desktop-up {
@@ -54,11 +54,26 @@
     display: grid;
     grid-template-columns: 1fr auto;
     padding: 25px;
+
+    .close button {
+        &:before, &:after {
+            position: absolute;
+            content: ' ';
+            height: 17px;
+            width: 2px;
+            background-color: $closeBtnColor;
+            transform: rotate(45deg);
+        }
+
+        &:after {
+            transform: rotate(-45deg);
+        }
+    }
 }
 
 .modal-body {
-    background: darkgrey;
-    color: white;
+    background: $modalBodyColor;
+    color: $whiteColor;
     padding: 25px;
     width: 100%;
 }
@@ -76,10 +91,10 @@
 
 .cancel-modal {
     width: 35%;
-    color: white;
+    color: $whiteColor;
     padding: 10px 20px;
     background: rgb(211, 59, 33);
-    border: solid 2px darkgrey;
+    border: solid 2px $modalBodyColor;
     @include border-radius(20px);
     justify-content: center;
 
@@ -88,16 +103,16 @@
         justify-self: start;
 
         &:hover {
-            color: #fff;
+            color: $whiteColor;
         }
     }
 }
 
 .confirm-modal {
     width: 35%;
-    color: #3b3536;
+    color: $mainFontColor;
     padding: 10px 20px;
-    border: solid 2px darkgrey;
+    border: solid 2px $modalBodyColor;
     @include border-radius(20px);
     justify-content: center;
     transition: .5s;
@@ -107,8 +122,8 @@
         justify-self: end;
 
         &:hover {
-            color: #fff;
-            background: darkgrey;
+            color: $whiteColor;
+            background: $modalBodyColor;
         }
     }
 }

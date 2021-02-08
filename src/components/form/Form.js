@@ -25,16 +25,15 @@ export class Form extends Component {
             data[elements[i].name] = elements[i].value
         }
 
-        this.emitter.dispatch('new record', 'confirm')
+        this.emitter.dispatch('confirming', 'create')
 
-        const unsubscribe = this.emitter.subscribe('new record', async (state) => {
-            console.log('state: ', state)
+        const unsubscribe = this.emitter.subscribe('confirming', async (state) => {
             if (state === 'confirmed') {
-                console.log('save data ....')
                 await createRequest('/api/add-record', 'POST', {
                     data: data,
                 })
                 this.clearData(event)
+                this.emitter.dispatch('rerender', 'afterSubmit')
             }
             unsubscribe()
         })

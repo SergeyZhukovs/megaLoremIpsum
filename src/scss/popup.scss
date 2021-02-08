@@ -21,8 +21,9 @@
     left: 50%;
     padding: 25px;
     transform: translate(-50%, -50%);
-    background: #fff;
+    background: $whiteColor;
     border-radius: 15px;
+    @include border-radius();
     transition: .5s;
 
     @include desktop-up {
@@ -41,15 +42,26 @@
 }
 
 .title {
-    color: #3b3536;
+    color: $mainFontColor;
 }
 
 .data-head {
     font-weight: 700;
 }
 
-.close-modal {
-    color: #4158d0;
+.close-modal button {
+    &:before, &:after {
+        position: absolute;
+        content: ' ';
+        height: 17px;
+        width: 2px;
+        background-color: $closeBtnColor;
+        transform: rotate(45deg);
+    }
+
+    &:after {
+        transform: rotate(-45deg);
+    }
 }
 
 .modal-body {
@@ -60,5 +72,6 @@
 }
 
 .modal-header {
-    color: #4158d0;
+    display: grid;
+    grid-template-columns: 1fr auto;
 }

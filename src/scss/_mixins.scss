@@ -15,6 +15,12 @@
     background: linear-gradient($direction, $list);
 }
 
+@mixin mobile-up {
+    @media (min-width: 768px) and (max-width: 1024px) {
+        @content;
+    }
+}
+
 @mixin tablet-up {
     @media (min-width: 768px) {
         @content;

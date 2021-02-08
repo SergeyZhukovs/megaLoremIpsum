@@ -29,7 +29,7 @@ export const getAll = async (client, key = 'untitled') => {
                 resolve(result)
             }
 
-            reject(new Error('Sorry, goodbye ...'))
+            reject(new Error('Redis error ...'))
         })
     })
     return await data
@@ -45,10 +45,6 @@ export const ifKeyExist = async (client, key) => {
         })
     })
     return await data
-}
-
-export const removeAll = async (client) => {
-    client.flush()
 }
 
 export const getDataById = async (client, key, id) => {

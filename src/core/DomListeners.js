@@ -11,10 +11,4 @@ export class DomListeners {
             this.selector.addEventListener(listener, this[listener])
         })
     }
-
-    removeDomListeners () {
-        this.listeners.forEach((listener) => {
-            this.selector.removeEventListener(listener, this[listener])
-        })
-    }
 }

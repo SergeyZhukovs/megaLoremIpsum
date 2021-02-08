@@ -45,11 +45,5 @@ export function createRecordForm (data = [], isLoading = true) {
     form.insertAdjacentHTML('beforeend', items.join(''))
     form.insertAdjacentHTML('beforeend', btnWrap.outerHTML)
 
-    const formHtml = form.outerHTML
-
-    return formHtml
-    /* return `<div>
-        <label>${labelName}</label>
-        <input type="text" value="">
-    </div>`*/
+    return form.outerHTML
 }

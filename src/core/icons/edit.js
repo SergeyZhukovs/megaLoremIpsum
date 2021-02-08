@@ -1,5 +1,5 @@
 export const editIcon = () => {
-    return `<svg fill="currentColor" viewBox="0 0 469.331 469.331">
+    return `<svg version="1.1" fill="currentColor" viewBox="0 0 469.331 469.331">
             <g>
             <path d="M438.931,30.403c-40.4-40.5-106.1-40.5-146.5,0l-268.6,268.5c-2.1,2.1-3.4,
             4.8-3.8,7.7l-19.9,147.4 c-0.6,4.2,0.9,8.4,3.8,11.3c2.5,2.5,6,4,9.5,4c0.6,0,1.2,0,

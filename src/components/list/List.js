@@ -14,7 +14,15 @@ export class List extends Component {
             ...options,
         })
 
-        this.rt = $root
+        this.root = $root
+
+        this.emitter.subscribe('rerender', (state) => {
+            if (state === 'afterSubmit') {
+                this.fetchData().then((data) => {
+                    this.root.innerHTML = createList(data, false)
+                })
+            }
+        })
     }
 
     async fetchData () {
@@ -79,7 +87,6 @@ export class List extends Component {
             this.emitter.dispatch('confirming', {type: 'update'})
             // eslint-disable-next-line no-case-declarations
             const unsubscribeUpdate = this.emitter.subscribe('confirming', async (state) => {
-                console.log('subscribe update record: ', state)
                 if (state === 'confirmed') {
                     const dataObject = this.prepareData(cells)
                     await createRequest('/api/update-record', 'PUT', {
@@ -120,7 +127,7 @@ export class List extends Component {
             const dif = responseTime - requestTime
             const timeout = dif > 3000 ? 0 : 5000
             setTimeout(() => {
-                this.rt.innerHTML = createList(data, false)
+                this.root.innerHTML = createList(data, false)
             }, timeout)
         })
 
