@@ -19,7 +19,7 @@ export class Popup extends Component {
         this.emitter.subscribe('modal', (state) => {
             switch (state) {
             case 'open':
-                this.content = getFromHistory()
+                if (getFromHistory()) this.content = getFromHistory()
                 $root.focus()
                 $root.classList.toggle(popupStyles.active)
                 this.root.innerHTML = createModal(this.content.data)
