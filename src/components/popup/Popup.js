@@ -1,7 +1,7 @@
-import commonStyles from '@scss/common.scss'
+// import commonStyles from '@scss/common.scss'
 import popupStyles from '@scss/popup.scss'
 import { Component } from '@core/Component'
-import {getFromHistory} from '@core/utils';
+import {createRequest, getFromHistory} from '@core/utils';
 
 export class Popup extends Component {
     static className = popupStyles.notesPopup
@@ -9,78 +9,79 @@ export class Popup extends Component {
     constructor ($root, options) {
         super($root, {
             name: 'Popup',
-            listeners: ['click', 'load'],
+            listeners: ['click', 'keydown'],
             ...options,
         })
 
-        this.componentRoot = $root
+        this.content = getFromHistory()
 
-        window.onpopstate = function (event) {
-            console.warn(`location: ${document.location}, state: ${JSON.stringify(event.state)}`)
-        }
-
-        const subscribe = this.emitter.subscribe('click to open popup', (state) => {
-            const info = getFromHistory()
-            let data = {}
-            if (!info) {
-                data = {}
-            } else {
-                data = Object.keys(info.data)
-            }
-            this.componentRoot.classList.toggle(popupStyles.showPopup)
-            document.querySelector(`.${popupStyles.modalBody}`).innerHTML = `<div>
-            ${data.map((item) => (item))}
-            </div>`
-            subscribe()
+        window.addEventListener('load', () => {
+            this.modalOnLoad()
         })
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('record');
-        console.log('myParam: ', Number.isInteger(parseInt(myParam)))
-        if (Number.isInteger(parseInt(myParam))) {
-            // this.emitter.dispatch('click to open popup', false)
-            setTimeout(() => {
-                // this.emitter.dispatch('click to open popup', false)
-            }, 5000)
-        }
-    }
-
-    load (e) {
-        console.warn('============')
+        this.emitter.subscribe('modal', (state) => {
+            switch (state) {
+            case 'open':
+                console.log('foc')
+                $root.focus()
+                console.log('---foc---')
+                // eslint-disable-next-line no-case-declarations
+                let data = {}
+                if (this.content) {
+                    data = Object.keys(this.content.data)
+                }
+                $root.classList.toggle(popupStyles.active)
+                document.querySelector(`.${popupStyles.modalBody}`).innerHTML = `<div>
+            ${data.map((item) => (item))}
+            </div>`
+                break
+            case 'close':
+                $root.classList.toggle(popupStyles.active)
+                history.back()
+                break
+            }
+        })
     }
 
     click (event) {
         const target = event.target
-        const modalSelector = document.querySelector(`.${popupStyles.modal}`)
-        const isClosest = target.closest(modalSelector)
-        console.log('modalSelector: ', modalSelector)
-        if (!isClosest) {
-            this.emitter.dispatch('click to open popup', false)
-            console.log('click popup', event.target.className)
-            this.componentRoot.classList.toggle(popupStyles.showPopup)
-            history.back()
+        const action = target.dataset.action
+        const isClosest = target.closest(`.${popupStyles.modal}`)
+        if (!isClosest || action === 'close') {
+            this.emitter.dispatch('modal', 'close')
+        }
+    }
+
+    keydown (e) {
+        if (e.code === 'Escape') {
+            this.emitter.dispatch('modal', 'close')
+        }
+    }
+
+    async modalOnLoad () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('record');
+        if (Number.isInteger(parseInt(myParam))) {
+            /* make request*/
+            const result = await createRequest(`/api/record/${myParam}`)
+            this.content = result
+            this.emitter.dispatch('modal', 'open')
         }
     }
 
     toHTML () {
         return `<div class="popup ${popupStyles.modal}">
-        <div class="${popupStyles.modalHeader}">
-            <h3>Add new reacord</h3>
-            <div class="${popupStyles.closeModal} ${commonStyles.icon} ${commonStyles.close}"></div>
-        </div>
-        <div class="${popupStyles.modalBody}">
-            
-            <div class="button1">Page 1</div>
-            <div class="button2">Page 2</div>
-            <div class="button3">Page 3</div>
-        </div>
-        <div class="modal-footer">
-            <button>Close</button>
-        </div>
-    </div>`
-    }
-
-    destroy () {
-        super.destroy()
+            <div class="${popupStyles.modalHeader}">
+                <div class="${popupStyles.title}">Record Number:</div>
+                <div class="md-body ${popupStyles.modalBody}">
+                    Are you sure you want to add new record!!!!?
+                </div>
+                <div class="close">
+                    <button class="${popupStyles.closeModal}" data-action="close">X</button>
+                </div>
+            </div>
+            <div class="${popupStyles.modalBody}">
+            </div>
+        </div>`
     }
 }

@@ -1,19 +1,25 @@
-// import { viewIcon, deleteIcon } from '@core/icons'
+import { viewIcon, deleteIcon, editIcon } from '@core/icons'
 import tableStyles from '@scss/tables.scss'
 function createHead (cellItem, isLoading) {
     const cellClass = isLoading ? tableStyles.skeleton : ''
     const contentClass = isLoading ? `${tableStyles.title} ${tableStyles.loading}` : ''
-    return `<th class="${cellClass}">
-        <span class="${contentClass}">${cellItem}</span>
-    </th>`
+    return isLoading ?
+        `<div class="${cellClass} ${tableStyles.tableHeader}">
+            <span class="${contentClass}"></span>
+        </div>` :
+        `<div class="${cellClass} ${tableStyles.tableHeader}">${cellItem}</div>`
 }
 
 function createCell (cellItem, isLoading, cellName = 'def') {
     const cellClass = isLoading ? tableStyles.skeleton : cellName
     const contentClass = isLoading ? `${tableStyles.title} ${tableStyles.loading}` : ''
-    return `<td data-th="${cellItem.columnName || ''}" class="${cellClass}">
-        <span class="${contentClass}">${cellItem.value || ''}</span>
-    </td>`
+    return isLoading ?
+        `<div data-th="${cellItem.columnName || ''}" class="${cellClass}">
+            <span class="${contentClass}">${cellItem.value || ''}</span>
+        </div>` :
+        `<div data-th="${cellItem.columnName || ''}" class="${cellClass}">
+            ${cellItem.value || ''}
+        </div>`
 }
 
 function createRow (cols = [], type = 'cell', isLoading = true) {
@@ -22,13 +28,14 @@ function createRow (cols = [], type = 'cell', isLoading = true) {
     let controlContent = ''
     if (!isLoading) {
         controlHead = '&nbsp;'
-        controlContent = `<div class="controls" style="display: flex">
-                <button data-action="view">View</button>
-                <button class="edit" data-action="edit">Edit</button>
-                <button data-action="delete">Delete</button>
+        controlContent = `<div class="${tableStyles.controls}">
+                <button data-action="view">${viewIcon()}</button>
+                <button data-action="edit">${editIcon()}</button>
+                <button data-action="delete">${deleteIcon()}</button>
         </div>`
     }
-    return `<tr>${(info).map((col, index) => {
+    return `<div class="${tableStyles.row} ${type === 'head' ? tableStyles.headRow : 'rw'}">
+${(info).map((col, index) => {
         const cellCl = !index ? 'non-edit' : 'data-container'
         return (
             type === 'head' ?
@@ -40,9 +47,9 @@ function createRow (cols = [], type = 'cell', isLoading = true) {
     ${
     type === 'head' ?
         createHead(controlHead, isLoading) :
-        createCell({value: controlContent}, isLoading, 'ctl')
+        createCell({value: controlContent}, isLoading, tableStyles.ctl)
 }
-    </tr>`
+    </div>`
 }
 
 function getColumnName (data) {
@@ -57,15 +64,15 @@ function getColumnName (data) {
 }
 
 export function createList (data = [], isLoading = true ) {
-    const colsCount = 6
-    const table = document.createElement('table')
+    const colsCount = 5
+    const table = document.createElement('div')
+    table.classList.add(tableStyles.table)
     const rows = []
     let cols = new Array(colsCount).fill('')
     data = data.length && data || cols
 
     if (!isLoading) {
         cols = getColumnName(data)
-        console.log('data: ', data)
     }
 
     rows.push(createRow(cols, 'head', isLoading))
@@ -74,7 +81,6 @@ export function createList (data = [], isLoading = true ) {
 
     for (let i=0; i <= rowCount; i++) {
         const itemData = data[i] || cols
-        // console.log('itemData: ', itemData)
         rows.push(createRow(itemData, '', isLoading))
     }
 

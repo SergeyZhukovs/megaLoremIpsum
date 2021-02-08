@@ -54,7 +54,7 @@ export class Form extends Component {
         this.fetchData().then((data) => {
             const responseTime = new Date().getTime()
             const dif = responseTime - requestTime
-            const timeout = dif > 3000 ? 0 : 3000
+            const timeout = dif > 3000 ? 0 : 5000
             setTimeout(() => {
                 this.rt.innerHTML = createRecordForm(data, false)
             }, timeout)

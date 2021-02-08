@@ -9,6 +9,6 @@ export class Footer extends Component {
     }
 
     toHTML () {
-        return 'footer'
+        return '&copy; All rights reserved'
     }
 }

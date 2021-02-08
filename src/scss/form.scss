@@ -1,6 +1,6 @@
 @import "variables";
 @import "mixins";
-@import 'animations';
+@import 'common';
 
 .form-container {
   display: flex;
@@ -10,21 +10,33 @@
   padding: 30px 0;
 
   .skeleton {
-    background-color: #fff;
     height: auto;
-    width: auto;
+    width: 100%;
     overflow: hidden;
     margin: 12px;
     box-shadow: 9px 17px 45px -29px rgba(0, 0, 0, 0.44);
     color: green;
 
+    &.submit-skeleton {
+      width: 100%;
+      margin-left: auto;
+
+      @include desktop-up {
+        width: 10%;
+      }
+    }
+
     .title {
       color: rebeccapurple;
       display: block;
       width: 100%;
-      padding: 15px 8px;
+      padding: 8px;
       font-size: 16px;
       font-weight: 700;
+
+      @include desktop-up {
+        padding: 15px 8px;
+      }
 
       &.loading {
         border-radius: 15px;
@@ -49,26 +61,71 @@
                 right top, from(transparent),
                 color-stop(rgba(255, 255, 255, 0.2)),
                 to(transparent));
-
         background: linear-gradient(90deg, transparent,
                 rgba(255, 255, 255, 0.5), transparent);
-
-        /* Adding animation */
         animation: loading 2s infinite;
       }
     }
   }
 
+  label {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  input[type="submit"] {
+    display: flex;
+    width: 40%;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: #3b3536;
+    padding: 10px 20px;
+    border: solid 2px darkgrey;
+    @include border-radius(20px);
+
+    @include desktop-up {
+      width: 17%;
+      margin: 10px 3px 0 auto;
+    }
+  }
+
   .w-100 {
     width: 100%;
+    margin: 0 auto;
+
+    @include desktop-up {
+      width: 100%;
+    }
   }
-}
 
-.inline-form {
-  display: flex;
-  flex-wrap: wrap;
-}
+  .inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-left: 15px;
+    margin-right: 15px;
 
-.form-item {
-  margin: 3px;
+    @include desktop-up {
+      width: 70%;
+      margin: 0 auto;
+    }
+  }
+
+  .form-item {
+    display: flex;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+
+    input {
+      height: 35px;
+      @include border-radius(20px);
+    }
+
+    @include desktop-up {
+      flex: 1 1 0px;
+      margin: 3px;
+    }
+  }
 }

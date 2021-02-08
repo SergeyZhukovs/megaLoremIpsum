@@ -20,21 +20,46 @@ export function createLabel (text = '', className= 'label', innerClass = 'inner'
     const innerEl = document.createElement('span')
     innerEl.classList.add(...innerClass)
     innerEl.appendChild(document.createTextNode(text))
-    label.setAttribute('class', className)
+    label.classList.add(...className)
     label.appendChild(innerEl)
     return label.outerHTML
 }
 
-export function createInpt (type = 'text', name = '', className= 'input', isRequired = false) {
+export function createInpt (isLoading = true, type = 'text', name = 'blank',
+    className= 'input', isRequired = false, cellClass, contentClass) {
+    className = typeof className === 'string' ? className.split(' ') : className
+    cellClass = typeof cellClass === 'string' ? cellClass.split(' ') : cellClass
+    contentClass = typeof contentClass === 'string' ? contentClass.split(' ') : contentClass
+    if (isLoading) {
+        const loaderEl = document.createElement('div')
+        const innerEl = document.createElement('span')
+        loaderEl.classList.add(...cellClass)
+        innerEl.classList.add(...contentClass)
+        loaderEl.appendChild(innerEl)
+        return loaderEl.outerHTML
+    }
+
     const input = document.createElement('input')
     input.setAttribute('type', type)
     input.setAttribute('name', name)
     if (isRequired) input.setAttribute('required', '')
-    input.setAttribute('class', `${className}`);
+    input.classList.add(...className)
     return input.outerHTML
 }
 
-export function createBtn (type = 'submit', btnText = 'Submit') {
+export function createBtn (isLoading = true, cellClass,
+    contentClass, type = 'submit', btnText = 'Submit') {
+    cellClass = typeof cellClass === 'string' ? cellClass.split(' ') : cellClass
+    contentClass = typeof contentClass === 'string' ? contentClass.split(' ') : contentClass
+    if (isLoading) {
+        const el = document.createElement('div')
+        el.classList.add(...cellClass)
+        const innerEl = document.createElement('span')
+        innerEl.classList.add(...contentClass)
+        el.appendChild(innerEl)
+        return el.outerHTML
+    }
+
     const submitButton = document.createElement('input')
     submitButton.setAttribute('type', type)
     submitButton.setAttribute('value', btnText)

@@ -1,6 +1,6 @@
 import express from 'express'
 import { readFile, lastId } from './utils'
-import { createClient, setData, getAll, ifKeyExist } from './redis'
+import { createClient, setData, getAll, ifKeyExist, getDataById } from './redis'
 import { capitalize } from '../src/core/utils';
 
 const fs = require('fs')
@@ -28,6 +28,12 @@ app.get('/api/getList', async (req, res) => {
     return res.end(allData)
 })
 
+app.get('/api/record/:id', async (req, res) => {
+    const id = req.params.id;
+    const result = await getDataById(client, 'list', id)
+    return res.end(JSON.stringify(result))
+})
+
 app.put('/api/update-record', async (req, res) => {
     const dataFromStorage = await getAll(client, 'list')
     const data = JSON.parse(dataFromStorage)
@@ -51,7 +57,6 @@ app.put('/api/update-record', async (req, res) => {
         })
     })
     await setData(client, 'list', data)
-    // console.log(JSON.stringify(data))
     res.end('{}')
 })
 

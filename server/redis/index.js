@@ -51,6 +51,18 @@ export const removeAll = async (client) => {
     client.flush()
 }
 
-export const getDataById = () => {
-    return 'getDataById from redis'
+export const getDataById = async (client, key, id) => {
+    const data = await getAll(client, key)
+    const list = JSON.parse(data)
+    let result = null
+    list.forEach((item, rootIndex) => {
+        item.data.forEach((row) => {
+            if (row.columnName === 'ID' && row.value == id) {
+                result = item
+                return
+            }
+        })
+        if (result) return
+    })
+    return result
 }

@@ -1,14 +1,17 @@
+import commonStyles from '@scss/common.scss'
 import formStyles from '@scss/form.scss'
 import { createBtn, createInpt, createLabel, getColumnName } from '@core/utils'
 
 function createCell (cellItem, isLoading) {
-    const cellClass = isLoading ? formStyles.skeleton : ''
-    const contentClass = isLoading ? [formStyles.title, formStyles.loading] : ''
+    const cellLabelClass = isLoading ? [formStyles.skeleton, commonStyles.label]: ''
+    const contentClass = isLoading ? [formStyles.title, formStyles.loading]: ''
+    const cellInputClass = isLoading ? [formStyles.skeleton]: ''
     const inputName = cellItem.toLowerCase()
 
     return `<div class="${formStyles.formItem}">
-                ${createLabel(cellItem, cellClass, contentClass)}
-                ${createInpt('text', inputName, 'inpt w-100', true)}
+                ${createLabel(cellItem, cellLabelClass, contentClass)}
+                ${createInpt(isLoading, 'text', inputName,
+        [formStyles.w100], true, cellInputClass, contentClass)}
             </div>`
 }
 
@@ -18,7 +21,7 @@ function createSection (cols = [], isLoading) {
 }
 
 export function createRecordForm (data = [], isLoading = true) {
-    const sectionCount = 5
+    const sectionCount = 4
     const items = []
     let sections = new Array(sectionCount).fill('')
     data = data.length && data || sections
@@ -34,7 +37,10 @@ export function createRecordForm (data = [], isLoading = true) {
 
     const btnWrap = document.createElement('div')
     btnWrap.classList.add(formStyles.w100)
-    btnWrap.innerHTML = createBtn()
+
+    const cellClass = isLoading ? [formStyles.skeleton, formStyles.submitSkeleton]: ''
+    const contentClass = isLoading ? [formStyles.title, formStyles.loading]: ''
+    btnWrap.innerHTML = createBtn(isLoading, cellClass, contentClass)
 
     form.insertAdjacentHTML('beforeend', items.join(''))
     form.insertAdjacentHTML('beforeend', btnWrap.outerHTML)

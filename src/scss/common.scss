@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;700&display=swap');
+@import 'mixins';
+html {
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+button {
+  position: relative;
+  transition: .5s;
+  @include button(#fff);
+
+  &:hover {
+    color: orangered;
+  }
+}
+
 .icon {
   .close {
     position: absolute;
@@ -22,15 +38,16 @@
   }
 }
 
-/* * :focus {
+ * :focus {
   outline: none;
-}*/
-
-.w-100 {
-  width: 100%;
 }
 
 input {
   padding: 6px 12px;
   border: solid 1px #ced4da;
+}
+
+.label {
+  width: 100%;
+  background-color: transparent;
 }

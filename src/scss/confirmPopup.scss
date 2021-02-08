@@ -1,54 +1,62 @@
 @import 'variables';
 @import 'mixins';
-@import 'animations';
 
 .confirm-popup {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
     position: fixed;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
     background: rgba(0, 0, 0, 0.5);
-
-    &.active {
-        display: flex;
-    }
-
-    .item {
-        height: 15px;
-        width: 300px;
-        background: dimgrey;
-        border-radius: 40px;
-    }
-
-    .title {
-        color: red;
-    }
-
+    z-index: -1;
+    transition: .3s;
 }
 
-.active {
-    display: flex;
+.item {
+    height: 15px;
+    width: 300px;
+    background: dimgrey;
+    border-radius: 40px;
+}
+
+.title {
+    color: #3b3536;
 }
 
 .modal {
+    display: grid;
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 500px;
-    top: 0;
+    width: 95%;
+    top: 30%;
     left: 50%;
-    transform: translateX(-50%);
-    background: white;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 15px;
+    transition: .5s;
+
+    @include desktop-up {
+        width: 500px;
+    }
 }
 
-.modal-footer {
-    color: #4158d0;
-    padding: 25px;
-    width: 100%;
+.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 3;
+
+    .modal {
+        top: 40%;
+    }
 }
+
+.modal-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 25px;
+}
+
 .modal-body {
     background: darkgrey;
     color: white;
@@ -57,23 +65,51 @@
 }
 
 .controls {
-    display: flex;
-    justify-content: center;
-    padding: 25px;
+    display: grid;
+    grid-gap: 10px;
+    justify-items: center;
+    padding: 25px 10px;
+
+    @include desktop-up {
+        grid-template-columns: auto auto;
+    }
 }
 
 .cancel-modal {
+    width: 35%;
     color: white;
-    background: red;
-    border-radius: 30px;
+    padding: 10px 20px;
+    background: rgb(211, 59, 33);
+    border: solid 2px darkgrey;
+    @include border-radius(20px);
+    justify-content: center;
+
+    @include desktop-up {
+        width: 50%;
+        justify-self: start;
+
+        &:hover {
+            color: #fff;
+        }
+    }
 }
 
 .confirm-modal {
-    color: #4158d0;
-    border-radius: 30px;
-}
+    width: 35%;
+    color: #3b3536;
+    padding: 10px 20px;
+    border: solid 2px darkgrey;
+    @include border-radius(20px);
+    justify-content: center;
+    transition: .5s;
 
-.modal-header {
-    padding: 25px;
-    width: 100%;
+    @include desktop-up {
+        width: 50%;
+        justify-self: end;
+
+        &:hover {
+            color: #fff;
+            background: darkgrey;
+        }
+    }
 }

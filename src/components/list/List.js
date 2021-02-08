@@ -1,6 +1,7 @@
 import tableStyles from '@scss/tables.scss'
 import { Component } from '@core/Component'
 import { createList } from '@/components/list/list.template';
+import { saveIcon, editIcon } from '@core/icons'
 import {createRequest, setToHistory} from '@core/utils'
 
 export class List extends Component {
@@ -14,8 +15,6 @@ export class List extends Component {
         })
 
         this.rt = $root
-
-        // this.emitter.dispatch('open modal', true)
     }
 
     async fetchData () {
@@ -47,37 +46,28 @@ export class List extends Component {
     }
 
     async click (event) {
-        const action = event.target.dataset.action
-        const cells = event.target.closest('tr').children
-        console.log('click', event)
+        const btn = event.target.nodeName !== 'BUTTON' &&
+            event.target.closest('button') ||
+            event.target
+        const action = btn.dataset.action
+        const cells = event.target.closest('.rw').children
         switch (action) {
         case 'view':
             // eslint-disable-next-line no-case-declarations
             const dataObject = this.prepareData(cells)
             setToHistory(dataObject, '', `./?record=${dataObject.id}`)
-            this.emitter.dispatch('click to open popup', false)
+            this.emitter.dispatch('modal', 'open')
             break
         case 'delete':
             this.emitter.dispatch('confirming', {type: 'delete'})
             // eslint-disable-next-line no-case-declarations
             const unsubscribeDelete = this.emitter.subscribe('confirming', async (state) => {
-                console.log('delete !!!!!')
                 if (state === 'confirmed') {
-                    console.log('delete <---->')
                     const dataObject = this.prepareData(cells, false)
-                    /* let recordId = 0
-                    for (let i = 0; i < cells.length; i++) {
-                        const className = cells[i].className
-                        if (className === 'non-edit') {
-                            recordId = cells[i].textContent.replace(/^\s+|\s+$/g, '')
-                            break
-                        }
-                    }*/
-                    const result = await createRequest('/api/delete-record', 'DELETE', {
+                    await createRequest('/api/delete-record', 'DELETE', {
                         data: dataObject,
                     })
-                    event.target.closest('tr').remove()
-                    console.log('result: ', result)
+                    btn.closest('.rw').remove()
                     // this.rt.innerHTML = createList(data, false)
                 }
                 unsubscribeDelete()
@@ -94,9 +84,11 @@ export class List extends Component {
                         data: dataObject,
                     })
                 }
-                event.target.dataset.action = 'edit'
-                event.target.textContent = 'Edit'
-                event.target.closest('tr').classList.toggle('editable')
+                btn.dataset.action = 'edit'
+                btn.innerHTML = editIcon()
+                btn.classList.toggle(tableStyles.activeBtn)
+
+                btn.closest('.rw').classList.toggle(tableStyles.editable)
                 unsubscribeUpdate()
             })
             break
@@ -108,10 +100,11 @@ export class List extends Component {
                     cells[i].toggleAttribute('contenteditable')
                 }
             }
-            event.target.dataset.action = 'save'
-            event.target.textContent = 'Save'
+            btn.dataset.action = 'save'
+            btn.innerHTML = saveIcon()
+            btn.classList.toggle(tableStyles.activeBtn)
 
-            event.target.closest('tr').classList.toggle('editable')
+            btn.closest('.rw').classList.toggle(tableStyles.editable)
             break
         default:
             // console.log('event.target: ', action)
@@ -125,7 +118,7 @@ export class List extends Component {
         this.fetchData().then((data) => {
             const responseTime = new Date().getTime()
             const dif = responseTime - requestTime
-            const timeout = dif > 3000 ? 0 : 3000
+            const timeout = dif > 3000 ? 0 : 5000
             setTimeout(() => {
                 this.rt.innerHTML = createList(data, false)
             }, timeout)

@@ -1,14 +1,14 @@
-@mixin button($color: green) {
+@mixin button($color: green, $size: 27px) {
     display: flex;
-    align-content: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    min-width: 2rem;
-    padding: 0.3rem;
-    color: $color;
-    background: rgba(0, 0, 0, 0.7);
+    width: $size;
+    padding: 5px;
+    background: transparent;
+    border: 0;
     cursor: pointer;
+}
+
+@mixin border-radius($radius: 15px) {
+    border-radius: $radius;
 }
 
 @mixin gradientBackground($direction, $list) {

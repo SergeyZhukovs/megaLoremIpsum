@@ -2,61 +2,85 @@
 @import 'mixins';
 @import 'animations';
 
-button {
-    @include button(#fff);
-
-    &.save {
-        width: 1rem;
-        height: 1rem;
-        background: url("../assets/save.svg");
-    }
-
-    &.edit {
-        width: 1rem;
-        height: 1rem;
-        color: red;
-        //background: url("../assets/edit.svg");
-    }
-}
-
-.heading-inc {
-    color: red;
-}
-
-.heading {
-    color: $green;
-}
-
-.rounded {
-    border-radius: 10px;
-}
-
 .notes-table {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 70%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 20px 0;
 
-    .table-container {
-        display: flex;
+    @include desktop-up {
+        width: 70%;
+        margin: 20px auto;
+    }
+
+    .table {
+        display: grid;
         width: 100%;
-        max-width: 95%;
-        background: $white;
 
-        /*table {
-            width: 100%;
+        .table-header {
+            display: none;
 
-            th {
+            @include desktop-up {
+                display: grid;
+                font-size: 20px;
+            }
+        }
+
+        .row {
+            display: grid;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
+
+            &.head-row {
                 display: none;
 
                 @include desktop-up {
-                    display: inline-flex;
+                    display: grid;
                 }
             }
 
-            td {
-                display: block;
+            &.editable {
+                border-color: orangered;
+            }
+
+            div {
+                .controls {
+                    display: grid;
+                    grid-template-columns: repeat(3, auto);
+                    justify-content: center;
+                    margin: 10px 0 0;
+
+                    .active-btn {
+                        color: orangered;
+                    }
+
+                    @include desktop-up {
+                        margin: 0;
+                    }
+                }
+
+                &:not(.ctl) {
+                    &:before {
+                        content: attr(data-th) ': ';
+                        font-weight: bold;
+                        width: 6.5em;
+                        display: inline-flex;
+
+                        @include desktop-up {
+                            display: none;
+                        }
+                    }
+
+                    &.controls {
+                        &:before {
+                            content: none;
+                        }
+                    }
+
+                    @include desktop-up {
+                        padding: 5px;
+                    }
+                }
 
                 &.skeleton {
                     background-color: #fff;
@@ -64,25 +88,33 @@ button {
                     width: auto;
                     overflow: hidden;
                     margin: 12px;
-                    border-radius: 5px;
                     box-shadow: 9px 17px 45px -29px rgba(0, 0, 0, 0.44);
 
-                    &__title {
+                    &:before {
+                        content: none;
+                    }
+
+                    .title {
+                        display: block;
+                        width: 100%;
                         padding: 8px;
-                        font-size: 22px;
+                        font-size: 16px;
                         font-weight: 700;
 
+                        @include desktop-up {
+                            padding: 10px 8px;
+                        }
+
                         &.loading {
-                            height: 1rem;
-                            width: 50%;
-                            margin: 1rem;
-                            border-radius: 3px;
+                            border-radius: 15px;
+                            overflow: hidden;
                         }
                     }
 
                     .loading {
                         position: relative;
                         background-color: #e2e2e2;
+                        overflow: hidden;
 
                         &:after {
                             display: block;
@@ -96,200 +128,35 @@ button {
                                     right top, from(transparent),
                                     color-stop(rgba(255, 255, 255, 0.2)),
                                     to(transparent));
-
                             background: linear-gradient(90deg, transparent,
                                     rgba(255, 255, 255, 0.5), transparent);
-
-                            !* Adding animation *!
                             animation: loading 2s infinite;
                         }
                     }
                 }
+            }
 
-                &:first-child {
-                    padding-top: 0.5em;
-                }
+            @include desktop-up {
+                grid-template-columns: 0.5fr 2fr 2fr 2fr 1fr 1fr;
+                border-radius: 0;
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+                border-bottom: solid 1px rgb(229, 229, 229);
 
-                &:last-child {
-                    padding-bottom: 0.5em;
-                }
-
-                &:before {
-                    content: attr(data-th) ': ';
-                    font-weight: bold;
-                    width: 6.5em;
-                    display: inline-flex;
-
-                    @include desktop-up {
-                        display: none;
-                    }
+                .table-header {
+                    color: #fff;
+                    background: rgb(10, 49, 124);
                 }
             }
-        }*/
+        }
+    }
+
+    .table-container {
+        display: flex;
+        width: 100%;
+        max-width: 95%;
+        background: $white;
     }
 }
 
-table {
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-
-    th {
-        //display: none;
-
-        @include desktop-up {
-            //display: inline-flex;
-        }
-    }
-
-    // Desktop
-    th {
-        background: darkslategrey;
-        //display: flex;
-        padding: 10px;
-        color: #ced4da;
-
-        &.skeleton {
-            //background-color: #fff;
-            height: auto;
-            width: auto;
-            overflow: hidden;
-            margin: 12px;
-            box-shadow: 9px 17px 45px -29px rgba(0, 0, 0, 0.44);
-            color: green;
-
-            .title {
-                color: rebeccapurple;
-                display: block;
-                width: 100%;
-                padding: 15px 8px;
-                font-size: 16px;
-                font-weight: 700;
-
-                &.loading {
-                    border-radius: 15px;
-                    overflow: hidden;
-                }
-            }
-
-            .loading {
-                position: relative;
-                background-color: #e2e2e2;
-                overflow: hidden;
-
-                &:after {
-                    display: block;
-                    content: "";
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    top: 0;
-                    transform: translateX(-100%);
-                    background: -webkit-gradient(linear, left top,
-                            right top, from(transparent),
-                            color-stop(rgba(255, 255, 255, 0.2)),
-                            to(transparent));
-
-                    background: linear-gradient(90deg, transparent,
-                            rgba(255, 255, 255, 0.5), transparent);
-
-                    /* Adding animation */
-                    animation: loading 2s infinite;
-                }
-            }
-        }
-
-        &:first-child {
-            //padding-top: 0.5em;
-        }
-
-        &:last-child {
-            //padding-bottom: 0.5em;
-        }
-
-        &:before {
-            content: attr(data-th) ': ';
-            font-weight: bold;
-            width: 6.5em;
-            display: inline-flex;
-
-            @include desktop-up {
-                display: none;
-            }
-        }
-    }
-
-    td {
-        //display: block;
-        padding: 10px;
-
-        &.skeleton {
-            background-color: #fff;
-            height: auto;
-            width: auto;
-            overflow: hidden;
-            margin: 12px;
-            box-shadow: 9px 17px 45px -29px rgba(0, 0, 0, 0.44);
-            color: green;
-
-            .title {
-                color: rebeccapurple;
-                display: block;
-                width: 100%;
-                padding: 15px 8px;
-                font-size: 16px;
-                font-weight: 700;
-
-                &.loading {
-                    border-radius: 15px;
-                    overflow: hidden;
-                }
-            }
-
-            .loading {
-                position: relative;
-                background-color: #e2e2e2;
-                overflow: hidden;
-
-                &:after {
-                    display: block;
-                    content: "";
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    top: 0;
-                    transform: translateX(-100%);
-                    background: -webkit-gradient(linear, left top,
-                            right top, from(transparent),
-                            color-stop(rgba(255, 255, 255, 0.2)),
-                            to(transparent));
-
-                    background: linear-gradient(90deg, transparent,
-                            rgba(255, 255, 255, 0.5), transparent);
-
-                    /* Adding animation */
-                    animation: loading 2s infinite;
-                }
-            }
-        }
-
-        &:first-child {
-            //padding-top: 0.5em;
-        }
-
-        &:last-child {
-            //padding-bottom: 0.5em;
-        }
-
-        &:before {
-            content: attr(data-th) ': ';
-            font-weight: bold;
-            width: 6.5em;
-            display: inline-flex;
-
-            @include desktop-up {
-                display: none;
-            }
-        }
-    }
-}

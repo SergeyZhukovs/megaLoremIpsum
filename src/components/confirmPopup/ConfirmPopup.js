@@ -80,15 +80,13 @@ export class PopupConfirm extends Component {
                 <div class="md-body ${confirmPopupStyles.modalBody}">
                     Are you sure you want to add new record!!!!?
                 </div>
-                <div class="${confirmPopupStyles.modalFooter}">
-                    <div class="${confirmPopupStyles.controls}">
-                        <button class="${confirmPopupStyles.confirmModal}" data-action="confirm">
-                            Confirm
-                        </button>
-                        <button class="${confirmPopupStyles.cancelModal}" data-action="cancel">
-                            Cancel
-                        </button>
-                    </div>
+                <div class="${confirmPopupStyles.controls}">
+                    <button class="${confirmPopupStyles.confirmModal}" data-action="confirm">
+                        Confirm
+                    </button>
+                    <button class="${confirmPopupStyles.cancelModal}" data-action="cancel">
+                        Cancel
+                    </button>
                 </div>
             </div>`
     }
