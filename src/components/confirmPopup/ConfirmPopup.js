@@ -11,11 +11,14 @@ export class PopupConfirm extends Component {
             ...options,
         })
 
+        this.rtty = $root
+
         this.emitter.subscribe('confirming', (state) => {
             /* we are watching for CRUD */
             document
                 .querySelector(`.${PopupConfirm.className}`)
                 .classList.toggle(confirmPopupStyles.active)
+            $root.focus()
             const title = document.querySelector(`.${confirmPopupStyles.title}`)
             const body = document.querySelector('.md-body')
             switch (state.type) {
@@ -31,7 +34,7 @@ export class PopupConfirm extends Component {
             case 'delete':
                 title.innerHTML = 'Delete record?'
                 body.innerHTML = 'Are you sure you want to delete a record?'
-                $root.focus()
+                console.log('focus: ', document.activeElement)
                 break
             }
         })

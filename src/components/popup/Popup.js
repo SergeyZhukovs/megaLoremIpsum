@@ -1,7 +1,7 @@
-// import commonStyles from '@scss/common.scss'
 import popupStyles from '@scss/popup.scss'
 import { Component } from '@core/Component'
 import {createRequest, getFromHistory} from '@core/utils';
+import { createModal } from '@/components/popup/popup.template';
 
 export class Popup extends Component {
     static className = popupStyles.notesPopup
@@ -9,31 +9,20 @@ export class Popup extends Component {
     constructor ($root, options) {
         super($root, {
             name: 'Popup',
-            listeners: ['click', 'keydown'],
+            listeners: ['click', 'keydown', 'load'],
             ...options,
         })
 
-        this.content = getFromHistory()
-
-        window.addEventListener('load', () => {
-            this.modalOnLoad()
-        })
+        this.root = $root
+        this.content = {}
 
         this.emitter.subscribe('modal', (state) => {
             switch (state) {
             case 'open':
-                console.log('foc')
+                this.content = getFromHistory()
                 $root.focus()
-                console.log('---foc---')
-                // eslint-disable-next-line no-case-declarations
-                let data = {}
-                if (this.content) {
-                    data = Object.keys(this.content.data)
-                }
                 $root.classList.toggle(popupStyles.active)
-                document.querySelector(`.${popupStyles.modalBody}`).innerHTML = `<div>
-            ${data.map((item) => (item))}
-            </div>`
+                this.root.innerHTML = createModal(this.content.data)
                 break
             case 'close':
                 $root.classList.toggle(popupStyles.active)
@@ -58,30 +47,24 @@ export class Popup extends Component {
         }
     }
 
-    async modalOnLoad () {
+    async load () {
         const urlParams = new URLSearchParams(window.location.search);
         const myParam = urlParams.get('record');
         if (Number.isInteger(parseInt(myParam))) {
             /* make request*/
             const result = await createRequest(`/api/record/${myParam}`)
-            this.content = result
+            const recordDetail = {}
+            result.data.forEach((item) => {
+                recordDetail[item.columnName] = item.value
+            })
+            this.content = {
+                data: recordDetail,
+            }
             this.emitter.dispatch('modal', 'open')
         }
     }
 
     toHTML () {
-        return `<div class="popup ${popupStyles.modal}">
-            <div class="${popupStyles.modalHeader}">
-                <div class="${popupStyles.title}">Record Number:</div>
-                <div class="md-body ${popupStyles.modalBody}">
-                    Are you sure you want to add new record!!!!?
-                </div>
-                <div class="close">
-                    <button class="${popupStyles.closeModal}" data-action="close">X</button>
-                </div>
-            </div>
-            <div class="${popupStyles.modalBody}">
-            </div>
-        </div>`
+        return createModal()
     }
 }

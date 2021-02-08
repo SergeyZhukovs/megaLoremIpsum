@@ -22,7 +22,7 @@ export class List extends Component {
         return result
     }
 
-    prepareData (target, saveDate = true) {
+    prepareData (target, saveDate = true, history = false) {
         let recordId = 0
         const updatedData = {}
         for (let i = 0; i < target.length; i++) {
@@ -30,7 +30,7 @@ export class List extends Component {
             if (className === 'data-container') {
                 const columnName = target[i].dataset.th
                 target[i].toggleAttribute('contenteditable')
-                if (saveDate) {
+                if (saveDate || history) {
                     updatedData[columnName] = target[i].textContent.replace(/^\s+|\s+$/g, '')
                 }
             }
@@ -41,6 +41,9 @@ export class List extends Component {
 
         if (saveDate) {
             return {id: recordId, data: updatedData}
+        }
+        if (history) {
+            return { data: { ...{ ID: recordId }, ...updatedData }, id: recordId }
         }
         return {id: recordId}
     }
@@ -54,7 +57,7 @@ export class List extends Component {
         switch (action) {
         case 'view':
             // eslint-disable-next-line no-case-declarations
-            const dataObject = this.prepareData(cells)
+            const dataObject = this.prepareData(cells, false, true)
             setToHistory(dataObject, '', `./?record=${dataObject.id}`)
             this.emitter.dispatch('modal', 'open')
             break
@@ -68,7 +71,6 @@ export class List extends Component {
                         data: dataObject,
                     })
                     btn.closest('.rw').remove()
-                    // this.rt.innerHTML = createList(data, false)
                 }
                 unsubscribeDelete()
             })
@@ -107,8 +109,6 @@ export class List extends Component {
             btn.closest('.rw').classList.toggle(tableStyles.editable)
             break
         default:
-            // console.log('event.target: ', action)
-            // this.emitter.dispatch('new record', 'canceled')
             break
         }
     }

@@ -5,8 +5,8 @@ export class DomListeners {
     }
 
     initDomListeners () {
-        console.log('this selector:', this.selector)
         this.listeners.forEach((listener) => {
+            if (listener === 'load') this.selector = window
             this[listener] = this[listener].bind(this)
             this.selector.addEventListener(listener, this[listener])
         })
